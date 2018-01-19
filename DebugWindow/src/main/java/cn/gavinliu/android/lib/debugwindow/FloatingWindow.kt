@@ -1,40 +1,63 @@
 package cn.gavinliu.android.lib.debugwindow
 
+import android.app.Activity
 import android.content.Context
+import android.graphics.PixelFormat
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
 import android.view.WindowManager
 
-/**
- * Created by gavin on 2018/01/19.
- */
-internal class FloatingWindow private constructor(context: Context) {
+internal class FloatingWindow(context: Context) : Contract.View {
 
     private val mWindowManager: WindowManager? = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
-    companion object {
-        private var instance: FloatingWindow? = null
+    private val mLayoutInflater: LayoutInflater = LayoutInflater.from(context)
 
-        fun create(context: Context): FloatingWindow? {
-            if (instance == null) {
-                synchronized(FloatingWindow::class) {
-                    if (instance == null) {
-                        instance = FloatingWindow(context)
-                    }
-                }
-            }
-            return instance!!
-        }
+    private var mView: View? = null
 
-        fun get(): FloatingWindow? {
-            return instance!!
+    private var mPresenter: Contract.Presenter? = null
+
+    override fun show(activity: Activity?) {
+        if (mPresenter == null || activity == null || activity.window.decorView.windowToken == null) return
+
+        if (mView == null) {
+            mView = mLayoutInflater.inflate(mPresenter!!.getDebugLayout(), null, false)
+            mPresenter!!.dispatchViewBind(mView!!)
+
+            val layoutParams: WindowManager.LayoutParams = createLayoutParams()
+            layoutParams.token = activity.window.decorView.windowToken
+            mWindowManager!!.addView(mView, layoutParams)
         }
     }
 
-    fun show() {
-
+    override fun hide() {
+        if (mView != null) {
+            mWindowManager!!.removeView(mView)
+            mView = null
+        }
     }
 
-    fun hide() {
+    override fun setPresenter(presenter: Contract.Presenter) {
+        mPresenter = presenter
+    }
 
+    private fun createLayoutParams(): WindowManager.LayoutParams {
+        val windowLayoutParams = WindowManager.LayoutParams()
+        windowLayoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG
+        windowLayoutParams.format = PixelFormat.RGBA_8888
+        windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        windowLayoutParams.flags = windowLayoutParams.flags or WindowManager.LayoutParams.FLAG_FULLSCREEN
+        windowLayoutParams.flags = windowLayoutParams.flags or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        windowLayoutParams.flags = windowLayoutParams.flags or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+        windowLayoutParams.flags = windowLayoutParams.flags or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+        windowLayoutParams.alpha = 1.0f
+        windowLayoutParams.gravity = Gravity.START or Gravity.TOP
+        windowLayoutParams.x = 0
+        windowLayoutParams.y = 0
+        windowLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
+        windowLayoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
+        return windowLayoutParams
     }
 
 }
