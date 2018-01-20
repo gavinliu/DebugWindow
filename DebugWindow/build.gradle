@@ -10,7 +10,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -32,6 +32,19 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
 repositories {
     mavenCentral()
+}
+
+apply plugin: 'com.novoda.bintray-release'
+
+publish {
+    userOrg = 'gavin6liu'
+    groupId = 'cn.gavinliu.android.lib'
+    artifactId = 'DebugWindow'
+    publishVersion = '1.0.0'
+    desc = 'android debug window library'
+    website = 'https://github.com/gavinliu/DebugWindow'
+    licences = ['Apache-2.0']
 }
