@@ -4,7 +4,7 @@
 
 ## Usage
 
-### dependencies
+### Dependencies
 
 ```
 implementation 'cn.gavinliu.android.lib:DebugWindow:1.0.0'
@@ -35,8 +35,10 @@ class MyApplication : Application() {
         }
     }
 }
+```
 
 #### With Java
+
 ```
 DebugWindow.Companion.getInstance(context)
     .bindDebugLayout(R.layout.debug_window)
