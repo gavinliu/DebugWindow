@@ -12,7 +12,7 @@ implementation 'cn.gavinliu.android.lib:DebugWindow:1.0.0'
 
 ### Coding
 
-#### With Kotlin
++ #### With Kotlin
 
 ```
 class MyApplication : Application() {
@@ -37,7 +37,7 @@ class MyApplication : Application() {
 }
 ```
 
-#### With Java
++ #### With Java
 
 ```
 DebugWindow.Companion.getInstance(context)
