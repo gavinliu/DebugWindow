@@ -14,7 +14,7 @@ implementation 'cn.gavinliu.android.lib:DebugWindow:1.0.0'
 
 + #### With Kotlin
 
-```
+```kotlin
 class MyApplication : Application() {
 
     override fun onCreate() {
@@ -39,7 +39,7 @@ class MyApplication : Application() {
 
 + #### With Java
 
-```
+```java
 DebugWindow.Companion.getInstance(context)
     .bindDebugLayout(R.layout.debug_window)
     .bindMainActivity(MainActivity.class)
